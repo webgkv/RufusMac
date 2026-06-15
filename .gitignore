@@ -1,0 +1,20 @@
+# Build output
+.build/
+.swiftpm/
+build/
+dist/
+DerivedData/
+*.dmg
+*.dmg.sha256
+
+# Bundled third-party binaries (fetched by scripts/fetch_thirdparty.sh)
+vendor/
+
+# macOS
+.DS_Store
+*.xcuserstate
+*.xcuserdatad
+
+# Editor
+.vscode/
+.idea/

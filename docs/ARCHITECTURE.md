@@ -1,0 +1,44 @@
+# Architecture
+
+RufusMac is split into a UI-free engine and a thin SwiftUI app, so the risky
+logic is isolated and testable.
+
+```
+┌────────────────────────────────────────────────────────────┐
+│  RufusMac (SwiftUI app, @main)                              │
+│  • ContentView, DevicePicker, BootSelection, FormatOptions   │
+│  • ConfirmationView (preview + dry-run gate), CatalogView    │
+│  • AppModel (@Observable) orchestrates the lifecycle         │
+│  • Liquid Glass: glassEffect / GlassEffectContainer          │
+└───────────────▲───────────────────────────┬─────────────────┘
+                │ uses                       │ renders
+┌───────────────┴───────────────────────────▼─────────────────┐
+│  RufusMacKit (pure Swift, no UI — unit-tested)              │
+│  Models:  USBDrive · BootImage · WriteConfig · DistroCatalog │
+│  Engine:  DiskService ─ DiskParser (safety filter)           │
+│           ImageInspector · BurnPlanner · PrivilegedRunner    │
+│           ChecksumService · Downloader · ToolPaths · Shell   │
+└───────────────┬──────────────────────────────────────────────┘
+                │ shells out to
+   diskutil · hdiutil · dd · shasum   (built-in, always present)
+   wimlib-imagex · mke2fs · ventoy    (bundled via fetch_thirdparty.sh)
+```
+
+## Flow of a burn
+1. **Enumerate** — `DiskService.listRemovableDrives()` runs `diskutil list/info -plist`; `DiskParser` parses it and **drops any non-external/internal disk** (the core data-loss guard).
+2. **Inspect** — `ImageInspector` mounts the ISO read-only, classifies it (Windows / Linux / raw) and detects an oversized `install.wim`.
+3. **Configure** — `WriteConfig.recommended(for:)` derives Rufus-style defaults.
+4. **Plan** — `BurnPlanner.makePlan(...)` builds a `BurnPlan`: a summary, warnings, and an ordered list of shell `BurnStep`s. `plan.script` is the full pipeline.
+5. **Confirm** — the UI shows the plan; the user picks **Preview only** (dry-run) or **Erase & Write**.
+6. **Execute** — `PrivilegedRunner` writes the script to a temp file and runs it once via `osascript … with administrator privileges` (a single password prompt). In dry-run mode it returns the script verbatim.
+
+## Why shell-out?
+macOS exposes no Swift API for raw partition/format/boot-sector work. The
+reliable, auditable approach is to orchestrate the same battle-tested CLI tools
+Rufus-class utilities depend on — and to make every command visible to the user
+before it runs.
+
+## Testing
+`Tests/RufusMacKitTests` (Swift Testing) covers `DiskParser` parsing and the
+internal-disk rejection. The `rmctl` CLI doubles as a manual harness:
+`rmctl list`, `rmctl preview <mode> [iso]`.
