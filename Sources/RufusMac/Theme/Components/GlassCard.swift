@@ -1,10 +1,9 @@
 import SwiftUI
 
-/// A rounded content container rendered on the Liquid Glass material.
+/// A rounded content container on Liquid Glass (macOS 26+) or material fallback.
 ///
-/// Wrap related controls in a `GlassCard` to get the translucent, refractive
-/// look that defines the RufusMac UI. Place multiple cards inside a
-/// `GlassEffectContainer` so their glass blends and morphs together.
+/// Wrap related controls in a `GlassCard`. Place multiple cards inside a
+/// `CompatibleGlassContainer` so their glass can blend on systems that support it.
 struct GlassCard<Content: View>: View {
     var cornerRadius: CGFloat = 22
     @ViewBuilder var content: Content
@@ -13,6 +12,6 @@ struct GlassCard<Content: View>: View {
         content
             .padding(16)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .glassEffect(.regular, in: .rect(cornerRadius: cornerRadius))
+            .rufusGlass(.roundedRect(cornerRadius))
     }
 }

@@ -1,29 +1,39 @@
-# Contributing to RufusMac
+# Contributing to RufusMac (Intel fork)
 
-Thanks for your interest! RufusMac is open source under GPLv3.
+Thanks for your interest. This repository is a **best-effort Intel Mac fork** of
+[h4rithd/RufusMac](https://github.com/h4rithd/RufusMac), licensed under GPLv3.
+
+For large feature work that is not Intel-/compatibility-specific, prefer
+contributing **upstream** when possible.
 
 ## Getting started
+
 ```bash
-git clone git@github.com:h4rithd/RufusMac.git
+git clone https://github.com/webgkv/RufusMac.git
 cd RufusMac
-swift build            # builds with Command Line Tools (no full Xcode needed)
-swift run rmctl list   # try the CLI
+swift build -c release --arch x86_64   # needs macOS 26 SDK; targets macOS 14+
+swift run rmctl list
+scripts/make_dmg.sh                    # Intel-only .dmg
 ```
 
 ## Project layout
-- `Sources/RufusMacKit` — pure-Swift engine (no UI). Add disk/image/writer logic here.
-- `Sources/RufusMac` — SwiftUI app (Liquid Glass). UI only.
-- `Sources/rmctl` — command-line companion.
-- `Tests/RufusMacKitTests` — Swift Testing suite (run with `swift test`; needs Xcode).
-- `scripts/` — build, packaging, icon, and safety scripts.
+
+- `Sources/RufusMacKit` — pure-Swift engine (no UI)
+- `Sources/RufusMac` — SwiftUI app (Liquid Glass on 26+, material fallback on 14/15)
+- `Sources/rmctl` — CLI companion
+- `Tests/RufusMacKitTests` — Swift Testing (`swift test --arch x86_64`)
+- `scripts/` — build / package / third-party fetch
 
 ## Guidelines
-- Keep engine logic **UI-free and testable** in `RufusMacKit`.
-- Anything destructive must produce a previewable `BurnPlan` and go through `PrivilegedRunner`.
-- **Never** allow internal disks to become write targets — preserve `DiskParser`'s safety filter and its tests.
-- Match the existing Swift style; document non-obvious behavior.
-- Run `scripts/scrub_secrets.sh` before opening a PR.
+
+- Keep packaging **x86_64-only** (`scripts/build_app.sh` refuses fat/arm64)
+- Keep engine logic UI-free in `RufusMacKit`
+- Destructive work must go through a previewable `BurnPlan` + `PrivilegedRunner`
+- **Never** allow internal disks as write targets
+- UI that needs Liquid Glass must go through `GlassCompatibility` helpers
+- Run `scripts/scrub_secrets.sh` before opening a PR
 
 ## Commits & PRs
-- Small, focused PRs with a clear description.
-- Note any change that affects the safety model explicitly.
+
+- Small, focused PRs
+- Call out any change to the safety model or minimum OS / arch explicitly

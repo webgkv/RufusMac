@@ -1,8 +1,6 @@
 import SwiftUI
 
-/// A Liquid Glass segmented control. The selected segment is tinted with the
-/// brand accent and the segments share a `GlassEffectContainer` so the
-/// highlight glides between them with a fluid glass morph.
+/// Segmented control: Liquid Glass morph on macOS 26+, material capsules on 14/15.
 struct GlassSegmented<Value: Hashable>: View {
     struct Item: Identifiable {
         let value: Value
@@ -15,7 +13,7 @@ struct GlassSegmented<Value: Hashable>: View {
     @Binding var selection: Value
 
     var body: some View {
-        GlassEffectContainer(spacing: 6) {
+        CompatibleGlassContainer(spacing: 6) {
             HStack(spacing: 6) {
                 ForEach(items) { item in
                     let isSelected = item.value == selection
@@ -32,11 +30,10 @@ struct GlassSegmented<Value: Hashable>: View {
                     }
                     .buttonStyle(.plain)
                     .foregroundStyle(isSelected ? .primary : .secondary)
-                    .glassEffect(
-                        isSelected
-                            ? .regular.tint(Brand.accent.opacity(0.55)).interactive()
-                            : .regular.interactive(),
-                        in: .capsule
+                    .rufusGlass(
+                        .capsule,
+                        tint: isSelected ? Brand.accent.opacity(0.55) : nil,
+                        interactive: true
                     )
                 }
             }

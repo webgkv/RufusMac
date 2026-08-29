@@ -8,27 +8,36 @@ on:
 
 jobs:
   build:
-    # Liquid Glass needs the macOS 26 SDK (Xcode 26). Use a macOS 26 runner
-    # image when available; otherwise pin the appropriate runner/Xcode.
+    # Intel-only fork. Build needs macOS 26 SDK for Liquid Glass symbols;
+    # runtime supports macOS 14+ (material fallback on 14/15).
+    # Prefer an Intel (or Rosetta-capable) runner; packaging forces --arch x86_64.
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
 
       - name: Show toolchain
-        run: swift --version && xcodebuild -version || true
+        run: uname -m && swift --version && xcodebuild -version || true
 
-      - name: Build (release)
-        run: swift build -c release
+      - name: Build (release, x86_64)
+        run: swift build -c release --arch x86_64
 
       - name: Test
-        run: swift test || echo "Tests require the Swift Testing framework (full Xcode)."
+        run: swift test --arch x86_64 || echo "Tests require the Swift Testing framework (full Xcode)."
 
       - name: Package portable .dmg
         run: scripts/make_dmg.sh
 
+      - name: Verify Intel-only binary
+        run: |
+          ARCHS="$(lipo -archs dist/RufusMac.app/Contents/MacOS/RufusMac)"
+          echo "app archs: $ARCHS"
+          test "$ARCHS" = "x86_64"
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: RufusMac-dmg
-          path: dist/RufusMac.dmg
+          name: RufusMac-dmg-intel
+          path: |
+            dist/RufusMac-*-mac-intel-X64.dmg
+            dist/RufusMac-*-mac-intel-X64.dmg.sha256
           if-no-files-found: warn

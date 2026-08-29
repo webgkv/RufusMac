@@ -1,7 +1,10 @@
 # Architecture
 
-RufusMac is split into a UI-free engine and a thin SwiftUI app, so the risky
-logic is isolated and testable.
+This document describes **webgkv/RufusMac** (Intel Mac fork). Behaviour matches
+upstream RufusMac except where packaging / OS compatibility differ.
+
+RufusMac is split into a UI-free engine and a thin SwiftUI app so risky logic
+stays isolated and testable.
 
 ```
 ┌────────────────────────────────────────────────────────────┐
@@ -9,7 +12,7 @@ logic is isolated and testable.
 │  • ContentView, DevicePicker, BootSelection, FormatOptions   │
 │  • ConfirmationView (preview + dry-run gate), CatalogView    │
 │  • AppModel (@Observable) orchestrates the lifecycle         │
-│  • Liquid Glass: glassEffect / GlassEffectContainer          │
+│  • Liquid Glass on macOS 26+; material fallback on 14/15     │
 └───────────────▲───────────────────────────┬─────────────────┘
                 │ uses                       │ renders
 ┌───────────────┴───────────────────────────▼─────────────────┐
@@ -24,21 +27,28 @@ logic is isolated and testable.
    wimlib-imagex · mke2fs · ventoy    (bundled via fetch_thirdparty.sh)
 ```
 
+## Intel fork notes
+
+- Packaging forces `--arch x86_64` (no Apple Silicon slice in the `.dmg`).
+- Deployment target is **macOS 14.0**; build still needs the **macOS 26 SDK**.
+- UI glass APIs are wrapped in `Sources/RufusMac/Theme/GlassCompatibility.swift`.
+
 ## Flow of a burn
-1. **Enumerate** — `DiskService.listRemovableDrives()` runs `diskutil list/info -plist`; `DiskParser` parses it and **drops any non-external/internal disk** (the core data-loss guard).
-2. **Inspect** — `ImageInspector` mounts the ISO read-only, classifies it (Windows / Linux / raw) and detects an oversized `install.wim`.
-3. **Configure** — `WriteConfig.recommended(for:)` derives Rufus-style defaults.
-4. **Plan** — `BurnPlanner.makePlan(...)` builds a `BurnPlan`: a summary, warnings, and an ordered list of shell `BurnStep`s. `plan.script` is the full pipeline.
-5. **Confirm** — the UI shows the plan; the user picks **Preview only** (dry-run) or **Erase & Write**.
-6. **Execute** — `PrivilegedRunner` writes the script to a temp file and runs it once via `osascript … with administrator privileges` (a single password prompt). In dry-run mode it returns the script verbatim.
+
+1. **Enumerate** — `DiskService.listRemovableDrives()`; `DiskParser` drops non-external disks.
+2. **Inspect** — `ImageInspector` classifies the ISO and detects oversized `install.wim`.
+3. **Configure** — `WriteConfig.recommended(for:)` derives defaults.
+4. **Plan** — `BurnPlanner.makePlan(...)` builds a `BurnPlan` (summary, warnings, steps).
+5. **Confirm** — UI shows the plan; **Preview only** or **Erase & Write**.
+6. **Execute** — `PrivilegedRunner` runs one admin-privileged script (or returns it in dry-run).
 
 ## Why shell-out?
+
 macOS exposes no Swift API for raw partition/format/boot-sector work. The
-reliable, auditable approach is to orchestrate the same battle-tested CLI tools
-Rufus-class utilities depend on — and to make every command visible to the user
-before it runs.
+auditable approach is to orchestrate CLI tools and show every command before it
+runs.
 
 ## Testing
-`Tests/RufusMacKitTests` (Swift Testing) covers `DiskParser` parsing and the
-internal-disk rejection. The `rmctl` CLI doubles as a manual harness:
-`rmctl list`, `rmctl preview <mode> [iso]`.
+
+`Tests/RufusMacKitTests` covers `DiskParser` and internal-disk rejection.
+`rmctl list` / `rmctl preview` are a manual harness.

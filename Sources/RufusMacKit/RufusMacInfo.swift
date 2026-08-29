@@ -9,4 +9,7 @@ public enum RufusMacInfo {
     public static let author = "Harith Dilshan"
     public static let site = "h4rithd.com"
     public static let repo = "https://github.com/h4rithd/RufusMac"
+    /// This Intel (x86_64) fork.
+    public static let intelForkRepo = "https://github.com/webgkv/RufusMac"
+    public static let intelForkLabel = "webgkv"
 }

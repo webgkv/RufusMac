@@ -15,8 +15,19 @@ struct DevicePickerView: View {
                     Button {
                         Task { await model.refreshDrives() }
                     } label: {
-                        Image(systemName: "arrow.clockwise")
-                            .symbolEffect(.rotate, isActive: model.isRefreshing)
+                        if #available(macOS 15.0, *) {
+                            Image(systemName: "arrow.clockwise")
+                                .symbolEffect(.rotate, isActive: model.isRefreshing)
+                        } else {
+                            Image(systemName: "arrow.clockwise")
+                                .rotationEffect(.degrees(model.isRefreshing ? 360 : 0))
+                                .animation(
+                                    model.isRefreshing
+                                        ? .linear(duration: 0.8).repeatForever(autoreverses: false)
+                                        : .default,
+                                    value: model.isRefreshing
+                                )
+                        }
                     }
                     .buttonStyle(.plain)
                     .help("Rescan for USB drives")
@@ -75,9 +86,9 @@ struct DevicePickerView: View {
             .contentShape(.rect)
         }
         .buttonStyle(.plain)
-        .glassEffect(
-            isSelected ? .regular.tint(Brand.accent.opacity(0.28)) : .regular,
-            in: .rect(cornerRadius: 14)
+        .rufusGlass(
+            .roundedRect(14),
+            tint: isSelected ? Brand.accent.opacity(0.28) : nil
         )
     }
 }

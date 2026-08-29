@@ -23,7 +23,7 @@ struct CatalogView: View {
                 .foregroundStyle(.secondary)
 
             ScrollView {
-                GlassEffectContainer(spacing: 10) {
+                CompatibleGlassContainer(spacing: 10) {
                     VStack(spacing: 10) {
                         ForEach(catalog.entries) { entry in
                             row(entry)
@@ -61,6 +61,6 @@ struct CatalogView: View {
             }
         }
         .padding(10)
-        .glassEffect(.regular, in: .rect(cornerRadius: 12))
+        .rufusGlass(.roundedRect(12))
     }
 }

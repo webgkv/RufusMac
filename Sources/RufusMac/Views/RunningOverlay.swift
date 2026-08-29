@@ -15,7 +15,7 @@ struct RunningOverlay: View {
                     .foregroundStyle(.secondary)
             }
             .padding(28)
-            .glassEffect(.regular, in: .rect(cornerRadius: 22))
+            .rufusGlass(.roundedRect(22))
         }
         .transition(.opacity)
     }

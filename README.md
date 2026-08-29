@@ -2,26 +2,52 @@
 
 <img src="docs/icon.png" width="128" alt="RufusMac icon" />
 
-# RufusMac
+# RufusMac (Intel Mac fork)
 
-### The Rufus-style bootable USB creator for macOS — with a true Liquid Glass interface.
+### The Rufus-style bootable USB creator for macOS — Liquid Glass on 26+, material UI on 14/15.
 
-**Create bootable Windows, Linux, and other USB installers from your Mac.** Single-ISO writing, Ventoy-style multiboot, Linux persistence, automatic checksum verification, and a built-in Windows 11 TPM / Secure Boot / online-account bypass — wrapped in Apple's native Liquid Glass design.
+**Create bootable Windows, Linux, and other USB installers from your Mac.** Single-ISO writing, Ventoy-style multiboot, Linux persistence, automatic checksum verification, and a built-in Windows 11 TPM / Secure Boot / online-account bypass — wrapped in Apple's native Liquid Glass design (with a fallback UI on older macOS).
 
-![Platform](https://img.shields.io/badge/platform-macOS%2026%2B-black?logo=apple)
+[![Upstream](https://img.shields.io/badge/upstream-h4rithd%2FRufusMac-blue)](https://github.com/h4rithd/RufusMac)
+![Platform](https://img.shields.io/badge/platform-macOS%2014%2B%20Intel-black?logo=apple)
+![Arch](https://img.shields.io/badge/arch-x86__64%20only-lightgrey)
 ![Swift](https://img.shields.io/badge/Swift-6-orange?logo=swift)
-![UI](https://img.shields.io/badge/SwiftUI-Liquid%20Glass-1aa3a3)
+![UI](https://img.shields.io/badge/SwiftUI-Liquid%20Glass%20%2B%20fallback-1aa3a3)
 ![License](https://img.shields.io/badge/license-GPLv3-blue)
 ![Made with Claude Code](https://img.shields.io/badge/built%20with-Claude%20Code-8A2BE2)
-![GitHub stars](https://img.shields.io/github/stars/h4rithd/RufusMac?style=social)
+![Reworked with Cursor](https://img.shields.io/badge/Intel%20fork%20reworked%20with-Cursor-000000)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/webgkv/RufusMac)
 
-_A single-window, native **Liquid Glass** app — mode switcher, live USB detection, drag-and-drop ISO, and a one-tap **START**. Grab it from [Releases](https://github.com/h4rithd/RufusMac/releases) to see it in motion._
+_A single-window, native app — mode switcher, live USB detection, drag-and-drop ISO, and a one-tap **START**. Grab the Intel `.dmg` from [this fork’s Releases](https://github.com/webgkv/RufusMac/releases)._
 
 </div>
 
 > **Why?** [Rufus](https://rufus.ie) is the gold standard for making bootable USBs — but it's **Windows-only**. On macOS you're stuck juggling `balenaEtcher` (Linux only), `WinDiskWriter` (Windows only), and `Ventoy` (Terminal-heavy). And almost every Mac tool **struggles with Windows 11 installers**. RufusMac brings it all together in one beautiful, native app.
 
-> 🤖 **RufusMac was designed and built with the help of [Claude Code](https://claude.com/claude-code)**, Anthropic's agentic coding tool.
+> 🤖 **Upstream RufusMac was designed and built with the help of [Claude Code](https://claude.com/claude-code).**  
+> ⌨️ **This Intel Mac fork** (x86_64 packaging, macOS 14/15 fallback UI, docs & releases) was **reworked with [Cursor](https://cursor.com).**
+
+Fork of [h4rithd/RufusMac](https://github.com/h4rithd/RufusMac) — same app, **RufusMac**.
+
+**Goal:** keep RufusMac working on **Intel (x86_64) Macs**, support **macOS 14 / 15** (Liquid Glass on 26+), and ship a ready-to-run **`.dmg`** on [Releases](https://github.com/webgkv/RufusMac/releases). Upstream targets Apple Silicon and macOS 26 (Tahoe); most remaining Intel Macs stayed on Sequoia / Sonoma.
+
+---
+
+## Download
+
+| Platform | Get it from |
+|---|---|
+| **Intel Mac** | **[This fork’s Releases](https://github.com/webgkv/RufusMac/releases)** (`.dmg`) |
+| Apple Silicon | [Upstream RufusMac](https://github.com/h4rithd/RufusMac) |
+
+## Scope & maintenance
+
+This is a **best-effort** Intel Mac packaging / compatibility fork. Tracking upstream and porting every newer release is **not guaranteed**. Prefer [upstream RufusMac](https://github.com/h4rithd/RufusMac) if you are on **Apple Silicon**.
+
+### What this fork changes
+- Builds and packages **x86_64 only** (no Apple Silicon slice in the DMG)
+- Deployment floor **macOS 14** — Liquid Glass on **26+**, material UI fallback on **14/15**
+- Docs, footer credit, and release naming adapted for this fork (reworked with Cursor)
 
 ---
 
@@ -47,14 +73,15 @@ _A single-window, native **Liquid Glass** app — mode switcher, live USB detect
 - 🖱️ **Drag-and-drop** ISO selection.
 - 🛡️ **Safety first** — every destructive action shows a full command preview and requires explicit confirmation. A **dry-run "Preview only"** mode runs nothing.
 - 🧰 **`rmctl` CLI** — list drives, preview command pipelines, browse the catalog, and verify checksums from the terminal.
-- 🎨 **Native Liquid Glass UI** — built in SwiftUI for macOS 26 (Tahoe). Adaptive light/dark, Apple-silicon native.
+- 🎨 **Native UI** — Liquid Glass on macOS 26 (Tahoe); material fallback on macOS 14/15. Adaptive light/dark, **Intel (x86_64) only** in this fork’s DMG.
 
 ## 🆚 How it compares
 
 | | **RufusMac** | Rufus | balenaEtcher | Ventoy | WinDiskWriter |
 |---|:--:|:--:|:--:|:--:|:--:|
 | Runs on macOS | ✅ | ❌ | ✅ | ⚠️ CLI | ✅ |
-| Native Liquid Glass UI | ✅ | — | ❌ | ❌ | ❌ |
+| Native Liquid Glass UI | ✅ (26+) | — | ❌ | ❌ | ❌ |
+| UI fallback (macOS 14/15) | ✅ *this fork* | — | — | — | — |
 | Windows ISO → USB | ✅ | ✅ | ⚠️ | ✅ | ✅ |
 | Linux ISO → USB | ✅ | ✅ | ✅ | ✅ | ❌ |
 | Windows 11 TPM/Secure Boot bypass | ✅ | ✅ | ❌ | ✅ | ⚠️ |
@@ -68,13 +95,13 @@ _A single-window, native **Liquid Glass** app — mode switcher, live USB detect
 
 ## 📦 Install
 
-1. Download **`RufusMac.dmg`** from the [latest release](https://github.com/h4rithd/RufusMac/releases).
+1. Download **`RufusMac-<version>-mac-intel-X64.dmg`** from [this fork’s Releases](https://github.com/webgkv/RufusMac/releases).
 2. Open it and drag **RufusMac** to Applications.
 3. First launch: **right-click → Open** (the app is unsigned open-source software, so Gatekeeper asks once).
 
-Verify your download: `shasum -a 256 RufusMac.dmg` and compare with the published `.sha256`.
+Verify your download: `shasum -a 256 RufusMac-*-mac-intel-X64.dmg` and compare with the published `.sha256`.
 
-> Requires **macOS 26 (Tahoe) or later** on Apple silicon.
+> Requires **macOS 14 (Sonoma) or later** on an **Intel (x86_64)** Mac. Liquid Glass appears on macOS 26+; 14/15 use a material fallback. This fork does **not** ship an Apple Silicon slice — use [upstream](https://github.com/h4rithd/RufusMac) for Silicon.
 
 ## 🚀 Usage
 
@@ -94,16 +121,18 @@ rmctl verify file.iso <sha256>
 
 ## 🛠️ Build from source
 
+Building needs a toolchain with the **macOS 26 SDK** (Liquid Glass symbols). The produced app runs on **macOS 14+**.
+
 ```bash
-git clone git@github.com:h4rithd/RufusMac.git
+git clone https://github.com/webgkv/RufusMac.git
 cd RufusMac
-swift build -c release          # builds with the Command Line Tools (no full Xcode needed)
-scripts/make_dmg.sh             # produces dist/RufusMac.dmg
-scripts/fetch_thirdparty.sh     # (optional) bundle wimlib/ventoy/e2fsprogs for Windows + Multiboot
+swift build -c release --arch x86_64   # Intel-only; Command Line Tools / Xcode with macOS 26 SDK
+scripts/make_dmg.sh                    # → dist/RufusMac-<version>-mac-intel-X64.dmg
+scripts/fetch_thirdparty.sh            # (optional) bundle wimlib/ventoy/e2fsprogs for Windows + Multiboot
 ```
 Run the tests (requires Xcode for the Swift Testing framework):
 ```bash
-swift test
+swift test --arch x86_64
 ```
 
 ## 🔒 Safety
@@ -118,11 +147,12 @@ Writing to a USB **erases everything on it** — double-check the device you sel
 
 ## 🧠 How it works
 
-A clean two-layer design: a pure-Swift engine (`RufusMacKit`) handles disk enumeration, image inspection, and command planning; the SwiftUI app renders it on Liquid Glass. Destructive work is assembled into one auditable shell pipeline using `diskutil` / `hdiutil` / `dd` plus bundled `wimlib-imagex` / `mke2fs` / Ventoy. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+A clean two-layer design: a pure-Swift engine (`RufusMacKit`) handles disk enumeration, image inspection, and command planning; the SwiftUI app renders Liquid Glass on macOS 26+ and a material fallback on 14/15. Destructive work is assembled into one auditable shell pipeline using `diskutil` / `hdiutil` / `dd` plus bundled `wimlib-imagex` / `mke2fs` / Ventoy. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## 🗺️ Roadmap
 
 - ✅ Liquid Glass UI, live device detection, dd/Linux writer, Windows writer + Win11 bypass, reclaim, ISO catalog, checksum verify, dry-run preview, `rmctl` CLI, portable `.dmg`.
+- ✅ **This fork:** Intel (x86_64) packaging, macOS 14/15 UI fallback, fork docs & Intel releases (reworked with Cursor).
 - ⚗️ **Experimental:** Ventoy-style multiboot, Linux persistence (need real-hardware validation).
 - 🔜 In-app downloader with live progress, real-time write progress bar, presets & recents, signing + notarization, localization.
 
@@ -133,16 +163,24 @@ A clean two-layer design: a pure-Swift engine (`RufusMacKit`) handles disk enume
 - **[Rufus](https://rufus.ie)** by Pete Batard — the inspiration and the gold standard.
 - **[Ventoy](https://www.ventoy.net)** — the multiboot engine concept.
 - **[wimlib](https://wimlib.net)** — WIM splitting.
-- Built with the help of **[Claude Code](https://claude.com/claude-code)**.
+- Upstream RufusMac built with the help of **[Claude Code](https://claude.com/claude-code)**.
+- **Intel Mac fork** (packaging, 14/15 fallback, docs, releases) reworked with **[Cursor](https://cursor.com)**.
+
+## Upstream
+
+- **Original repository:** [https://github.com/h4rithd/RufusMac](https://github.com/h4rithd/RufusMac)
+- Original author: [Harith Dilshan](https://h4rithd.com)
+- We may merge upstream when practical; continuous tracking is not promised (see **Scope & maintenance**)
 
 ## 📄 License
 
-[GPLv3](LICENSE) © **Harith Dilshan** — consistent with the Rufus/Ventoy open-source lineage.
+[GPLv3](LICENSE) © **Harith Dilshan** — consistent with the Rufus/Ventoy open-source lineage. This fork remains GPLv3.
 
 ---
 
 <div align="center">
 
-**Developed by [Harith Dilshan](https://h4rithd.com) · [h4rithd.com](https://h4rithd.com)**
+**Developed by [Harith Dilshan](https://h4rithd.com) · [h4rithd.com](https://h4rithd.com)**  
+**Intel fork by [webgkv](https://github.com/webgkv/RufusMac)** · reworked with [Cursor](https://cursor.com)
 
 </div>

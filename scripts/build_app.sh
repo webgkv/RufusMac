@@ -6,12 +6,17 @@ set -euo pipefail
 #
 #   Usage: scripts/build_app.sh [debug|release]
 #
+# This fork ships Intel (x86_64) only — no Apple Silicon slice in the .app/.dmg.
+# Minimum OS is macOS 14 (Liquid Glass at runtime on 26+; material fallback on 14/15).
+# Building still needs a toolchain with the macOS 26 SDK for Liquid Glass symbols.
+#
 # Developed by Harith Dilshan / h4rithd.com — built with the help of Claude Code.
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
 CONFIG="${1:-release}"
+ARCH="x86_64"
 APP_NAME="RufusMac"
 BUNDLE_ID="com.h4rithd.rufusmac"
 VERSION="$(cat "$ROOT/VERSION" 2>/dev/null || echo 0.1.0)"
@@ -22,10 +27,17 @@ APP="$DIST/$APP_NAME.app"
 MACOS_DIR="$APP/Contents/MacOS"
 RES_DIR="$APP/Contents/Resources"
 
-echo "▶ Building RufusMac ($CONFIG)…"
-swift build -c "$CONFIG"
-BIN_DIR="$(swift build -c "$CONFIG" --show-bin-path)"
+echo "▶ Building RufusMac ($CONFIG, $ARCH-only)…"
+swift build -c "$CONFIG" --arch "$ARCH"
+BIN_DIR="$(swift build -c "$CONFIG" --arch "$ARCH" --show-bin-path)"
 BIN="$BIN_DIR/$APP_NAME"
+
+# Refuse to ship a fat or wrong-arch binary.
+ARCHS="$(lipo -archs "$BIN" 2>/dev/null || true)"
+if [ "$ARCHS" != "$ARCH" ]; then
+  echo "error: expected $ARCH-only binary, got: ${ARCHS:-unknown}" >&2
+  exit 1
+fi
 
 echo "▶ Assembling $APP …"
 rm -rf "$APP"
@@ -59,7 +71,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
   <key>CFBundlePackageType</key><string>APPL</string>
   <key>CFBundleShortVersionString</key><string>$VERSION</string>
   <key>CFBundleVersion</key><string>$BUILD_NUM</string>
-  <key>LSMinimumSystemVersion</key><string>26.0</string>
+  <key>LSMinimumSystemVersion</key><string>14.0</string>
   <key>NSHighResolutionCapable</key><true/>
   <key>LSApplicationCategoryType</key><string>public.app-category.utilities</string>
   <key>CFBundleIconFile</key><string>AppIcon</string>

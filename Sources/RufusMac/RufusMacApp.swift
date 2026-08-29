@@ -3,8 +3,8 @@ import SwiftUI
 /// Application entry point.
 ///
 /// RufusMac is a single-window utility, so we use `Window` (not `WindowGroup`)
-/// to keep exactly one instance. The whole UI is rendered on Apple's Liquid Glass
-/// material, available natively on macOS 26 (Tahoe) and later.
+/// to keep exactly one instance. Liquid Glass is used on macOS 26+; macOS 14/15
+/// get a material-based visual fallback.
 @main
 struct RufusMacApp: App {
     var body: some Scene {

@@ -4,6 +4,9 @@ import PackageDescription
 // RufusMac — a native macOS bootable-USB creator with Liquid Glass UI.
 // Developed by Harith Dilshan / h4rithd.com — built with the help of Claude Code.
 //
+// This Intel (x86_64) fork. Deployment floor is macOS 14; Liquid Glass on 26+,
+// material fallback on 14/15. Packaging forces --arch x86_64.
+//
 // Two targets keep UI and logic cleanly separated and testable:
 //   • RufusMacKit — pure Swift engine (disk enumeration, writers, checksums). No UI.
 //   • RufusMac    — the SwiftUI app (@main), depends on RufusMacKit.
@@ -17,7 +20,7 @@ let commonSwiftSettings: [SwiftSetting] = [
 let package = Package(
     name: "RufusMac",
     platforms: [
-        .macOS("26.0") // Liquid Glass requires the macOS 26 SDK
+        .macOS("14.0") // Material UI on 14/15; Liquid Glass when running on 26+
     ],
     targets: [
         .target(

@@ -10,6 +10,8 @@ enum Brand {
     static let site = RufusMacInfo.site
     static let siteURL = URL(string: "https://\(RufusMacInfo.site)")!
     static let repoURL = URL(string: RufusMacInfo.repo)!
+    static let intelForkURL = URL(string: RufusMacInfo.intelForkRepo)!
+    static let intelForkLabel = RufusMacInfo.intelForkLabel
 
     /// Primary accent — a refined teal that reads well on Liquid Glass.
     static let accent = Color(red: 0.13, green: 0.74, blue: 0.71)

@@ -30,7 +30,7 @@ struct ContentView: View {
                 GlassSegmented(items: modeItems, selection: $model.mode)
 
                 ScrollView {
-                    GlassEffectContainer(spacing: 14) {
+                    CompatibleGlassContainer(spacing: 14) {
                         VStack(spacing: 14) {
                             DevicePickerView(model: model)
                             if model.requiresImage {
@@ -75,7 +75,7 @@ struct ContentView: View {
                 .font(.system(size: 26, weight: .semibold))
                 .foregroundStyle(Brand.accent)
                 .padding(10)
-                .glassEffect(.regular.tint(Brand.accent.opacity(0.35)), in: .rect(cornerRadius: 14))
+                .rufusGlass(.roundedRect(14), tint: Brand.accent.opacity(0.35))
             VStack(alignment: .leading, spacing: 1) {
                 Text(Brand.name)
                     .font(.system(size: 24, weight: .bold, design: .rounded))
@@ -96,7 +96,7 @@ struct ContentView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 6)
         }
-        .buttonStyle(.glassProminent)
+        .rufusPrimaryButtonStyle()
         .tint(model.mode == .reclaim ? Brand.danger : Brand.accent)
         .disabled(!model.canStart)
         .keyboardShortcut(.defaultAction)
