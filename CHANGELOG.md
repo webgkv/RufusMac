@@ -3,6 +3,9 @@
 All notable changes to this **Intel Mac fork** ([webgkv/RufusMac](https://github.com/webgkv/RufusMac))
 are documented here. Upstream history begins at **0.1.0**.
 
+> **Best-effort fork.** Support and porting of newer upstream releases are
+> **not guaranteed** — see README **Scope & maintenance**.
+
 ## [0.1.0-intel] — 2026-08-29
 
 Intel Mac packaging release based on upstream **0.1.0**.

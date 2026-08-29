@@ -3,6 +3,10 @@
 This document describes **webgkv/RufusMac** (Intel Mac fork). Behaviour matches
 upstream RufusMac except where packaging / OS compatibility differ.
 
+**Support note:** this fork is **best-effort**. Ongoing support and porting of
+newer upstream releases are **not guaranteed** (see the root README
+**Scope & maintenance**).
+
 RufusMac is split into a UI-free engine and a thin SwiftUI app so risky logic
 stays isolated and testable.
 

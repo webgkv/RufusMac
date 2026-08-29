@@ -3,6 +3,7 @@
 Thanks for your interest. This repository is a **best-effort Intel Mac fork** of
 [h4rithd/RufusMac](https://github.com/h4rithd/RufusMac), licensed under GPLv3.
 
+**Support and further porting are not guaranteed** — releases may lag or stop.
 For large feature work that is not Intel-/compatibility-specific, prefer
 contributing **upstream** when possible.
 
@@ -37,3 +38,4 @@ scripts/make_dmg.sh                    # Intel-only .dmg
 
 - Small, focused PRs
 - Call out any change to the safety model or minimum OS / arch explicitly
+- Do not assume maintainers will track upstream indefinitely

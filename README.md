@@ -42,7 +42,12 @@ Fork of [h4rithd/RufusMac](https://github.com/h4rithd/RufusMac) — same app, **
 
 ## Scope & maintenance
 
-This is a **best-effort** Intel Mac packaging / compatibility fork. Tracking upstream and porting every newer release is **not guaranteed**. Prefer [upstream RufusMac](https://github.com/h4rithd/RufusMac) if you are on **Apple Silicon**.
+This is a **best-effort** Intel Mac packaging / compatibility fork. **Support is
+not guaranteed.** Tracking upstream and porting newer RufusMac versions is
+**not guaranteed** — releases may lag or stop when the macOS / Swift toolchain
+for Intel changes, when upstream diverges too far, or when time runs out.
+Prefer [upstream RufusMac](https://github.com/h4rithd/RufusMac) if you are on
+**Apple Silicon**.
 
 ### What this fork changes
 - Builds and packages **x86_64 only** (no Apple Silicon slice in the DMG)
@@ -170,7 +175,7 @@ A clean two-layer design: a pure-Swift engine (`RufusMacKit`) handles disk enume
 
 - **Original repository:** [https://github.com/h4rithd/RufusMac](https://github.com/h4rithd/RufusMac)
 - Original author: [Harith Dilshan](https://h4rithd.com)
-- We may merge upstream when practical; continuous tracking is not promised (see **Scope & maintenance**)
+- We may merge upstream when practical; continuous tracking and ongoing support are **not promised** (see **Scope & maintenance**)
 
 ## 📄 License
 

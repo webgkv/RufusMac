@@ -7,6 +7,9 @@ fetched into `./vendor` by `scripts/fetch_thirdparty.sh` and bundled into
 On this **Intel fork**, bundled Homebrew tools must be **x86_64** (typically
 from `/usr/local` on Intel Macs). Do not ship arm64 Homebrew binaries in the DMG.
 
+This fork is **best-effort** — continued packaging support is **not guaranteed**
+(see the root README **Scope & maintenance**).
+
 | Tool | Used for | Required by | License |
 |------|----------|-------------|---------|
 | `diskutil`, `hdiutil`, `dd`, `shasum` | enumerate/format/write/verify | everything | Apple (system) |
